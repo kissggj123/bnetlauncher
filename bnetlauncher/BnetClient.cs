@@ -27,7 +27,6 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Microsoft.Win32;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace bnetlauncher
 {
@@ -270,21 +269,17 @@ namespace bnetlauncher
             var bnet_cmd = "battlenet://" + bnet_command;
             try
             {
+                // This will change the client "Page" to the game we wont
                 Process.Start(bnet_cmd);
 
-                // Open the client window so the play button is accessible
-                OpenWindow();
-
-                // TODO: This is a dirty hack, need to find how to see when window is ready
-                Thread.Sleep(1000);
-                SendEnter();
+                // Sending Enter will trigger the Play button causing the game to launch.
+                return SendEnter();
             }
             catch (Exception ex)
             {
                 Shared.Logger(ex.ToString());
                 return false;
             }
-            return true;
         }
 
         /// <summary>
@@ -416,35 +411,51 @@ namespace bnetlauncher
             }
 
             // launch it directly to force the client window to open
+            Shared.Logger(String.Format("Opening Battle.net client window by running '{0}'.", client_exe));
             Process.Start(client_exe);
-        }
-
-        /// <summary>
-        /// Sends a Mouse event click to the expected Location of the Play button
-        /// </summary>
-        public static void ClickPlayButton()
-        {
-            // look for battle.net client window
-
-            // get window height
-
-            // send mouse click to relative position of play button
-            // IMPORTANT: Test this with 4k screen to see if scaling breaks it
         }
 
         /// <summary>
         /// Sends the enter key to battle.net client which should be interpreted as play button activation
         /// </summary>
-        public static void SendEnter()
+        public static bool SendEnter()
         {
-            //Debugger.Launch();
-            Process p = Process.GetProcessesByName("battle.net").FirstOrDefault();
-            if (p != null)
+            // Make sure the window is open
+            OpenWindow();
+
+            Process client = Process.GetProcessById(GetProcessId());
+
+            // Make sure we actually have a running client
+            if (client == null)
             {
-                IntPtr h = p.MainWindowHandle;
-                Win32.SetForegroundWindow(h);
-                SendKeys.SendWait("{ENTER}");
+                // No client is running so can't send anything
+                Shared.Logger("Couldn't get battle.net client process information.");
+                return false;
             }
+
+
+            // Waits until the window swap is successfull or timeout is reached
+            const int timeout = 3000 / 100; // 3000ms / by 100ms delay
+
+            int time = 0;
+            while (0 == Win32.SetForegroundWindow(client.MainWindowHandle))
+            {
+                Shared.Logger("Failed to make client the foreground window, waiting and trying again");
+                Thread.Sleep(100);
+                time++;
+
+                if (time > timeout)
+                {
+                    // Couldn't change the window to the foreground
+                    Shared.Logger("Couldn't make battle.net client window the foreground window.");
+                    return false;
+                }
+            }
+
+            // Actually send the key
+            Shared.Logger("Sending Enter to the battle.net client window.");
+            SendKeys.SendWait("{ENTER}");
+            return true;
         }
     }
 }

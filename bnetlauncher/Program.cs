@@ -248,7 +248,12 @@ namespace bnetlauncher
             // don't mess with games that might already be running.
             DateTime launch_request_date = DateTime.Now;
             Shared.Logger(String.Format("Issuing game launch command '{1}' at '{0}'", launch_request_date.ToString("hh:mm:ss.ffff"), game_key));
-            BnetClient.Launch(game_key);
+            if (!BnetClient.Launch(game_key))
+            {
+                ShowMessageAndExit("Failed to launch game trough battle.net client.\n" +
+                    "It's likely bnetlauncher was unable to open battle.net client window\n\n" +
+                    "For more detail see instructions.txt on how to enable logging\n");
+            }
 
             // Searches for a game started trough the client for 15s
             Shared.Logger("Searching for new battle.net child processes for the game");
