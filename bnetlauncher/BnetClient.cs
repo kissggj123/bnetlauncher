@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2016-2017 madalien.com
+﻿// Copyright (C) 2016-2018 madalien.com
 // This file is part of bnetlauncher.
 //
 // bnetlauncher is free software: you can redistribute it and/or modify
@@ -269,6 +269,10 @@ namespace bnetlauncher
             try
             {
                 Process.Start(bnet_cmd);
+
+                // Open the client window so the play button is accessible
+                OpenWindow();
+                ClickPlayButton();
             }
             catch (Exception ex)
             {
@@ -294,7 +298,6 @@ namespace bnetlauncher
             // TODO: Find a way to do this that doesn't feel like a hack.
             Thread.Sleep(2000);
 
-            // 
             return WaitUntilReady();
         }
 
@@ -381,6 +384,47 @@ namespace bnetlauncher
             // clean up
             File.Delete(reg_file);
             return true;
+        }
+
+        /// <summary>
+        /// Opens the battle.net client Window
+        /// </summary>
+        public static void OpenWindow()
+        {
+            string client_exe = "";
+
+            // Get battle.net client exe location
+            try
+            {
+                using (var searcher = new ManagementObjectSearcher(String.Format("SELECT ExecutablePath FROM Win32_process WHERE ProcessId = {0}", GetProcessId())))
+                {
+                    foreach (var result in searcher.Get())
+                    {
+                        client_exe = Convert.ToString(result["ExecutablePath"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Shared.Logger(String.Format("Error finding battle.net client exe. {0}", ex.ToString()));
+                return;
+            }
+
+            // launch it directly to force the client window to open
+            Process.Start(client_exe);
+        }
+
+        /// <summary>
+        /// Sends a Mouse event click to the expected Location of the Play button
+        /// </summary>
+        public static void ClickPlayButton()
+        {
+            // look for battle.net client window
+
+            // get window height
+
+            // send mouse click to relative position of play button
+            // IMPORTANT: Test this with 4k screen to see if scaling breaks it
         }
     }
 }

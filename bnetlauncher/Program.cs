@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2016-2017 madalien.com
+﻿// Copyright (C) 2016-2018 madalien.com
 // This file is part of bnetlauncher.
 //
 // bnetlauncher is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 // https://msdn.microsoft.com/en-us/library/yz3w40d4(v=vs.90).aspx (Mutex.OpenExisting Method (String, MutexRights))
 // https://msdn.microsoft.com/en-us/library/aa767914(v=vs.85).aspx (Registering an Application to a URI Scheme)
 // https://stackoverflow.com/questions/2039186/reading-the-registry-and-wow6432node-key
+// https://stackoverflow.com/questions/2416748/how-to-simulate-mouse-click-in-c
 //
 // Starting the battle.net client unattached from the Steam Overlay
 // ================================================================

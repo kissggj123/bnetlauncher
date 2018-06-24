@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2016 madalien.com
+﻿// Copyright (C) 2016-2018 madalien.com
 // This file is part of bnetlauncher.
 //
 // bnetlauncher is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("madalien.com")]
 [assembly: AssemblyProduct("Battle.net Launcher for Steam")]
-[assembly: AssemblyCopyright("Copyright © 2016-2017 madalien.com")]
+[assembly: AssemblyCopyright("Copyright © 2016-2018 madalien.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,5 +49,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.19.*")]
-//[assembly: AssemblyFileVersion("1.19.*")]
+[assembly: AssemblyVersion("1.20.*")]
+//[assembly: AssemblyFileVersion("1.20.*")]
