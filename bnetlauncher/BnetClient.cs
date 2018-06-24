@@ -259,18 +259,26 @@ namespace bnetlauncher
         }
 
         /// <summary>
-        /// Launches a battle.net client URI command (without the battlenet://). 
+        /// Launches a battle.net client URI command (without the battlenet://).
+        /// After it sends a Enter key to actually launch the game  
         /// </summary>
         /// <param name="bnet_command">Battle.net client URI command to launch without
+        /// <param name="delay">if there should be a delay before sending an enter, needed if client was just started</param>
         /// the protocol part "battlenet://", leaving it blank will launch and/or open 
         /// the battle.net client.</param>
-        public static bool Launch(string bnet_command = "")
+        public static bool Launch(string bnet_command = "", bool delay = false)
         {
             var bnet_cmd = "battlenet://" + bnet_command;
             try
             {
                 // This will change the client "Page" to the game we wont
                 Process.Start(bnet_cmd);
+
+                // Delay to give time for the "Page" to swap
+                if (delay)
+                {
+                    Thread.Sleep(1000);
+                }
 
                 // Sending Enter will trigger the Play button causing the game to launch.
                 return SendEnter();

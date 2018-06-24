@@ -225,6 +225,11 @@ namespace bnetlauncher
                 game_key = param_game;
             }
 
+
+            // The battle.net client page doesn't swap instantly if it was just launched, thus there needs to be a delay
+            // before sending the enter key so it wont launch the last open page before it changes.
+            bool should_delay = false;
+
             // Make sure battle.net client is running
             if (BnetClient.GetProcessId() == 0)
             {
@@ -235,6 +240,7 @@ namespace bnetlauncher
                     // We explicitly call close on the file we just created so that when we try to delete the file 
                     // it's not locked causing the next launch to also trigger a close of the client.
                     File.Create(client_lock_file).Close();
+                    should_delay = true;
                 }
                 else
                 {
@@ -248,7 +254,7 @@ namespace bnetlauncher
             // don't mess with games that might already be running.
             DateTime launch_request_date = DateTime.Now;
             Shared.Logger(String.Format("Issuing game launch command '{1}' at '{0}'", launch_request_date.ToString("hh:mm:ss.ffff"), game_key));
-            if (!BnetClient.Launch(game_key))
+            if (!BnetClient.Launch(game_key, should_delay))
             {
                 ShowMessageAndExit("Failed to launch game trough battle.net client.\n" +
                     "It's likely bnetlauncher was unable to open battle.net client window\n\n" +
