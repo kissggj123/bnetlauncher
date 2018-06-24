@@ -26,6 +26,8 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Microsoft.Win32;
+using System.Windows.Forms;
+using System.Linq;
 
 namespace bnetlauncher
 {
@@ -272,7 +274,10 @@ namespace bnetlauncher
 
                 // Open the client window so the play button is accessible
                 OpenWindow();
-                ClickPlayButton();
+
+                // TODO: This is a dirty hack, need to find how to see when window is ready
+                Thread.Sleep(1000);
+                SendEnter();
             }
             catch (Exception ex)
             {
@@ -425,6 +430,21 @@ namespace bnetlauncher
 
             // send mouse click to relative position of play button
             // IMPORTANT: Test this with 4k screen to see if scaling breaks it
+        }
+
+        /// <summary>
+        /// Sends the enter key to battle.net client which should be interpreted as play button activation
+        /// </summary>
+        public static void SendEnter()
+        {
+            //Debugger.Launch();
+            Process p = Process.GetProcessesByName("battle.net").FirstOrDefault();
+            if (p != null)
+            {
+                IntPtr h = p.MainWindowHandle;
+                Win32.SetForegroundWindow(h);
+                SendKeys.SendWait("{ENTER}");
+            }
         }
     }
 }

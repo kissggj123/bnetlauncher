@@ -27,6 +27,7 @@
 // https://msdn.microsoft.com/en-us/library/aa767914(v=vs.85).aspx (Registering an Application to a URI Scheme)
 // https://stackoverflow.com/questions/2039186/reading-the-registry-and-wow6432node-key
 // https://stackoverflow.com/questions/2416748/how-to-simulate-mouse-click-in-c
+// https://stackoverflow.com/questions/15292175/c-sharp-using-sendkey-function-to-send-a-key-to-another-application
 //
 // Starting the battle.net client unattached from the Steam Overlay
 // ================================================================

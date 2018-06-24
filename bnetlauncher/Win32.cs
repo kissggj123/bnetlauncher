@@ -33,5 +33,9 @@ namespace bnetlauncher
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
+        [DllImport("User32.dll")]
+        public static extern int SetForegroundWindow(IntPtr point);
+
     }
 }
