@@ -50,17 +50,27 @@ using System.Diagnostics;
 using System.Management;
 using System.Threading;
 using System.Windows.Forms;
+using CommandLine;
+using CommandLine.Text;
 
 namespace bnetlauncher
 {
     class Program
     {
+        //[STAThread]
+        //static void Main(string[] args)
+        //{
+        //    // Needed so when we show a message box it doesn't look like Windows 98
+        //    Application.EnableVisualStyles();
+
+        //    var opts = Parser.Default.ParseArguments<Options>(args);
+        //    opts.WithParsed(options => { Main(options); });
+
+        //}
+
         [STAThread]
         static void Main(string[] args)
         {
-            // Needed so when we show a message box it doesn't look like Windows 98
-            Application.EnableVisualStyles();
-
             if (!Shared.CreateDataPath())
             {
                 // No Logger call since we can't even create the directory

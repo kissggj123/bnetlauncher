@@ -62,19 +62,32 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BnetClient.cs" />
     <Compile Include="BnetGame.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shared.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="CommandLine, Version=2.2.1.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.2.1\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.2.7.1\lib\net45\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.File, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serilog.Sinks.File.4.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
@@ -95,10 +108,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) g:\steam\
+    <PostBuildEvent>rem Combine exe into single file
+$(SolutionDir)\packages\ILMerge.2.14.1208\tools\ilmerge.exe /target:winexe /ndebug:false /out:$(TargetDir)bnetlauncherc.exe $(TargetPath) $(TargetDir)CommandLine.dll $(TargetDir)Serilog.dll $(TargetDir)Serilog.Sinks.File.dll
+move $(TargetDir)bnetlauncherc.exe $(TargetPath)
 
-del $(ProjectName)_vLatest.zip
-7z a -tzip $(ProjectName)_vLatest.zip $(TargetPath) $(ProjectDir)license.txt $(ProjectDir)instructions.txt</PostBuildEvent>
+rem Push test build into local install
+copy $(TargetPath) g:\steam\
+
+rem Package for distribution
+del $(ProjectName)_vNext.zip
+7z a -tzip $(ProjectName)_vNext.zip $(TargetPath) $(ProjectDir)license.txt $(ProjectDir)instructions.txt</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
